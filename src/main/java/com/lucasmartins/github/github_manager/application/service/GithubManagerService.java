@@ -1,11 +1,11 @@
 package com.lucasmartins.github.github_manager.application.service;
 
+import com.lucasmartins.github.github_manager.adapter.inbound.rest.dto.input.request.PrWithLastCommitRequest;
+import com.lucasmartins.github.github_manager.adapter.inbound.rest.dto.output.response.GithubManagerResponse;
+import com.lucasmartins.github.github_manager.adapter.outbound.github.commits.responses.CommitDetailResponse;
+import com.lucasmartins.github.github_manager.application.ports.inbound.GithubManagerServicePort;
 import com.lucasmartins.github.github_manager.application.ports.outbound.BranchServicePort;
 import com.lucasmartins.github.github_manager.application.ports.outbound.CommitServicePort;
-import com.lucasmartins.github.github_manager.application.ports.inbound.GithubManagerServicePort;
-import com.lucasmartins.github.github_manager.adapter.outbound.github.commits.responses.CommitDetailResponse;
-import com.lucasmartins.github.github_manager.adapter.inbound.rest.dto.output.response.GithubManagerResponse;
-import com.lucasmartins.github.github_manager.adapter.inbound.rest.dto.input.request.PrWithLastCommitRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ public class GithubManagerService implements GithubManagerServicePort {
         final List<String> branchNames = branchServicePort.listBranchNamesByRepositoryName(prWithLastCommitRequest.getRepositoryName());
 
         final List<CommitDetailResponse> commitDataResponses = branchNames.stream()
-                .map(branchName -> commitServicePort.getMostRecentCommit(prWithLastCommitRequest.getRepositoryName(), branchName))
+                .map(branchName -> commitServicePort.getMostRecentCommitFromBranch(prWithLastCommitRequest.getRepositoryName(), branchName))
                 .toList();
 
         return commitDataResponses.stream()
@@ -60,33 +60,6 @@ public class GithubManagerService implements GithubManagerServicePort {
                 .openPrTime(commitDetailResponse.getCommit().getCommitter().getDate())
                 .isLateCommit(isLateCommit(commitDetailResponse.getCommit().getCommitter().getDate(), prWithLastCommitRequest.getTimeLimit()))
                 .build();
-    }
-
-    public List<CommitDetailResponse> listLastCommitFromBranches(List<String> branchNames, String repositoryName) {
-        return branchNames.stream()
-                .map(branchName -> getMostRecentCommit(repositoryName, branchName))
-                .filter(Objects::nonNull)
-                .sorted(GithubManagerService::sortMostRecent)
-                .toList();
-    }
-
-    private CommitDetailResponse getMostRecentCommit(String repositoryName, String branchName) {
-        final List<CommitDetailResponse> commits = commitServicePort.listCommitsFromBranch(branchName, repositoryName);
-
-        return commits.stream()
-                .filter(Objects::nonNull)
-                .min(GithubManagerService::sortMostRecent)
-                .map(commit -> {
-                    commit.setBranchName(branchName);
-                    return commit;
-                })
-                .orElse(null);
-    }
-
-    private static int sortMostRecent(CommitDetailResponse commitDetailResponse, CommitDetailResponse commitDetailResponse1) {
-        final Instant d1 = Instant.parse(commitDetailResponse.getCommit().getCommitter().getDate());
-        final Instant d2 = Instant.parse(commitDetailResponse1.getCommit().getCommitter().getDate());
-        return d2.compareTo(d1);
     }
 
     public boolean isLateCommit(String lastCommitDate, String commitDateLimit) {
