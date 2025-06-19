@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: github-manager
+
+github:
+  client:
+    base-url: https://api.github.com/repos
+    repo-owner: Aulas-Engenharia-de-software
+    user-agent: LucasMartins007
+    branches-endpoint: /branches
+    commits-endpoint: /commits
+    repos:
+  security:
+    token: ${TOKEN}
+
+
+
