@@ -9,7 +9,6 @@ github:
     user-agent: LucasMartins007
     branches-endpoint: /branches
     commits-endpoint: /commits
-    repos:
   security:
     token: ${TOKEN}
 

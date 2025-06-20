@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -26,14 +27,14 @@ public class CommitService implements CommitServicePort {
             log.info("iniciando consulta dos commits da branch {}", branchName);
             final List<CommitDetailResponse> commits = commitsClient.listCommitsFromBranchName(repositoryName, branchName);
 
-            return commits.stream()
+            final CommitDetailResponse commitDetailResponse = commits.stream()
                     .filter(Objects::nonNull)
                     .min(CommitService::sortMostRecent)
-                    .map(commit -> {
-                        commit.setBranchName(branchName);
-                        return commit;
-                    })
                     .orElse(null);
+            Optional.ofNullable(commitDetailResponse)
+                    .ifPresent(commitDetail -> commitDetail.setBranchName(branchName));
+
+            return commitDetailResponse;
         } catch (FeignException e) {
             log.error("ocorreu um erro na consulta do commits mais recente da branch {}: {}", branchName, e.getMessage());
             throw new CommitsClientException("ocorreu um erro na consulta do commits mais recente da branch " + branchName + ": " + e.getMessage());

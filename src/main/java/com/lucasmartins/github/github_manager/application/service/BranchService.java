@@ -19,18 +19,6 @@ public class BranchService implements BranchServicePort {
     private final BranchesClient branchesClient;
 
     @Override
-    public List<BranchResponse> findBranchesByRepositoryName(String repositoryName) {
-        try {
-            log.info("iniciando consulta das branches do repositorio {}", repositoryName);
-            return branchesClient.listBranches(repositoryName);
-
-        } catch (FeignException e) {
-            log.error("ocorreu um erro na consulta das branches: {}", e.getMessage());
-            throw new BranchClientException("ocorreu um erro na consulta das branches: " + e.getMessage());
-        }
-    }
-
-    @Override
     public List<String> listBranchNamesByRepositoryName(String repositoryName) {
         try {
             var branchResponses = branchesClient.listBranches(repositoryName);
@@ -40,8 +28,7 @@ public class BranchService implements BranchServicePort {
                     .map(BranchResponse::getName)
                     .toList();
         } catch (FeignException e) {
-            log.error("ocorreu um erro na consulta das branches: {}", e.getMessage());
-            throw new BranchClientException("ocorreu um erro na consulta das branches: " + e.getMessage());
+            throw new BranchClientException("ocorreu um erro na consulta das branches: " + e);
         }
     }
 }
