@@ -16,7 +16,7 @@ import java.util.List;
 )
 public interface CommitsClient {
 
-    @GetMapping(path = "${github.client.repo-owner}/{repository_name}/commits")
+    @GetMapping(path = "${github.client.repo-owner}/{repository_name}/${github.client.commits-endpoint}")
     List<CommitDetailResponse> listCommitsFromBranchName(
             @PathVariable("repository_name") String repositoryName,
             @RequestParam("sha") String branchName

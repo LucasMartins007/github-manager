@@ -15,6 +15,6 @@ import java.util.List;
 )
 public interface BranchesClient {
 
-    @GetMapping(path = "${github.client.repo-owner}/{repository_name}/branches")
+    @GetMapping(path = "${github.client.repo-owner}/{repository_name}/${github.client.branches-endpoint}")
     List<BranchResponse> listBranches(@PathVariable("repository_name") String repositoryName);
 }
