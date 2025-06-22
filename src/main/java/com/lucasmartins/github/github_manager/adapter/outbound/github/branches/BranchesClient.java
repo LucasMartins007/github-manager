@@ -1,7 +1,7 @@
 package com.lucasmartins.github.github_manager.adapter.outbound.github.branches;
 
-import com.lucasmartins.github.github_manager.adapter.outbound.github.branches.responses.BranchResponse;
 import com.lucasmartins.github.github_manager.adapter.outbound.feign.interceptors.FeignInterceptor;
+import com.lucasmartins.github.github_manager.adapter.outbound.github.branches.responses.BranchResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

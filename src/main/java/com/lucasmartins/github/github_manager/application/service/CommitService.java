@@ -20,6 +20,7 @@ public class CommitService implements CommitServicePort {
 
     private final CommitsClient commitsClient;
 
+    @Override
     public List<CommitDetailModel> listCommitsFromBranch(String repositoryName, String branchName) {
         try {
             final List<CommitDetailResponse> commitDetailResponses = listCommitsFromBranchName(repositoryName, branchName);
