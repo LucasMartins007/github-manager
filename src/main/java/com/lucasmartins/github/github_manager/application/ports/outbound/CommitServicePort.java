@@ -1,8 +1,8 @@
 package com.lucasmartins.github.github_manager.application.ports.outbound;
 
-import com.lucasmartins.github.github_manager.adapter.outbound.github.commits.responses.CommitDetailResponse;
+import com.lucasmartins.github.github_manager.domain.model.CommitDetailModel;
 
 public interface CommitServicePort {
 
-    CommitDetailResponse getMostRecentCommitFromBranch(String repositoryName, String branchName);
+    CommitDetailModel getMostRecentCommitFromBranch(String repositoryName, String branchName);
 }

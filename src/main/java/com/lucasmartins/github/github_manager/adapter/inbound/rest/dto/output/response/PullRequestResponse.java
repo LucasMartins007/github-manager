@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GithubManagerResponse {
+public class PullRequestResponse {
 
     private String repositoryName;
 
@@ -17,7 +17,7 @@ public class GithubManagerResponse {
 
     private String openPrTime;
 
-    private String lastCommitTime;
+    private boolean isLate;
 
-    private boolean isLateCommit;
+    private CommitResponse commitResponse;
 }

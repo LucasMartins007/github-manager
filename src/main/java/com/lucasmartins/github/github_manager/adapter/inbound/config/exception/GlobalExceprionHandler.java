@@ -1,8 +1,8 @@
 package com.lucasmartins.github.github_manager.adapter.inbound.config.exception;
 
 import com.lucasmartins.github.github_manager.adapter.inbound.config.exception.response.ApiErrorResponse;
-import com.lucasmartins.github.github_manager.domain.exception.BranchClientException;
-import com.lucasmartins.github.github_manager.domain.exception.CommitsClientException;
+import com.lucasmartins.github.github_manager.domain.exception.NotFoundException;
+import com.lucasmartins.github.github_manager.domain.exception.abstracts.GeneralGithubManagerException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,30 +14,32 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceprionHandler {
 
-    @ExceptionHandler(BranchClientException.class)
-    public ResponseEntity<ApiErrorResponse> handleBranchClientException(BranchClientException exception, HttpServletRequest request) {
+    @ExceptionHandler(GeneralGithubManagerException.class)
+    public ResponseEntity<ApiErrorResponse> handleBranchClientException(GeneralGithubManagerException exception, HttpServletRequest request) {
         final ApiErrorResponse error = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(exception.getMessage())
+                .message("Ocorreu um erro na requisição.")
+                .detailedMessage(exception.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(CommitsClientException.class)
-    public ResponseEntity<ApiErrorResponse> handleCommitClientException(CommitsClientException exception, HttpServletRequest request) {
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleNotFoundException(NotFoundException exception, HttpServletRequest request) {
         final ApiErrorResponse error = ApiErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
-                .message(exception.getMessage())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(HttpStatus.NOT_FOUND.getReasonPhrase())
+                .message("Recurso não encontrado")
+                .detailedMessage(exception.getMessage())
                 .path(request.getRequestURI())
                 .build();
 
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
 

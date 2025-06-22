@@ -14,5 +14,6 @@ public class RequiredStatusChecksResponse {
     private String enforcementLevel;
 
     private List<String> contexts;
+
     private List<String> checks;
 }

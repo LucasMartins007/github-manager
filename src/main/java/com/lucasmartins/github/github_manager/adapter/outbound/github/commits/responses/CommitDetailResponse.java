@@ -1,21 +1,19 @@
 package com.lucasmartins.github.github_manager.adapter.outbound.github.commits.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
+@Builder
 public class CommitDetailResponse {
 
     private String sha;
 
     @JsonProperty("node_id")
     private String nodeId;
-
-    private String branchName;
 
     private CommitDataResponse commit;
 

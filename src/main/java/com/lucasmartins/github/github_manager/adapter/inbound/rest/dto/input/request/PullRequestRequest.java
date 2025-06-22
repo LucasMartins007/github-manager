@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class PrWithLastCommitRequest {
+public class PullRequestRequest {
 
     private String repositoryName;
 
