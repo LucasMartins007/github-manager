@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Collections;
 
 public class PullRequestModelMapper {
 
@@ -22,10 +23,10 @@ public class PullRequestModelMapper {
                 .branchName(commitDetailModel.getBranchName())
                 .author(commitDetailModel.getAuthor())
                 .email(commitDetailModel.getEmail())
-                .lastCommitMessage(commitDetailModel.getMessage())
+                .commitDetailModelList(Collections.singletonList(commitDetailModel))
+                .commitMessage(commitDetailModel.getMessage())
                 .openPrTime(commitDetailModel.getTime())
                 .isLate(isLateCommit(commitDetailModel.getTime(), pullRequestRequest.getTimeLimit()))
-                .commitDetailModelList(commitDetailModel)
                 .build();
     }
 
